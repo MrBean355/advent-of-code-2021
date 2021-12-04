@@ -24,6 +24,39 @@ class Day3(private val input: List<String>) : Puzzle {
     }
 
     override fun part2(): Number {
-        TODO("Not yet implemented")
+        val oxygenGenerator = input.reduce(true)
+        val co2Scrubber = input.reduce(false)
+
+        return oxygenGenerator.toInt(2) * co2Scrubber.toInt(2)
+    }
+
+    private fun List<String>.reduce(flip: Boolean): String {
+        val bitCount = first().length
+        val results = toMutableList()
+
+        for (i in 0 until bitCount) {
+            if (results.size <= 1) {
+                break
+            }
+            val mostCommon = results.mostCommonBit(i) ?: '1'
+            val toKeep = if (flip) {
+                mostCommon
+            } else {
+                if (mostCommon == '1') '0' else '1'
+            }
+            results.removeAll { it[i] != toKeep }
+        }
+
+        return results.single()
+    }
+
+    private fun List<String>.mostCommonBit(position: Int): Char? {
+        val ones = count { it[position] == '1' }
+        val zeroes = size - ones
+        return when {
+            zeroes > ones -> '0'
+            ones > zeroes -> '1'
+            else -> null
+        }
     }
 }
