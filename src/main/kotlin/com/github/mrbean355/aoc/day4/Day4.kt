@@ -28,7 +28,19 @@ class Day4(private val input: List<String>) : Puzzle {
     }
 
     override fun part2(): Number {
-        TODO("Not yet implemented")
+        val boards = boards.toMutableList()
+
+        moves.forEach { move ->
+            val first = boards.first()
+            boards.forEach { board ->
+                board.mark(move)
+            }
+            boards.removeAll { it.hasWon() }
+            if (boards.isEmpty()) {
+                return first.sumOfUnmarked() * move
+            }
+        }
+        error("No winner found")
     }
 
     private fun parse(): List<BingoBoard> {
