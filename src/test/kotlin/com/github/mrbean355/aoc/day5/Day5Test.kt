@@ -9,6 +9,8 @@ class Day5Test : PuzzleTest(Day5::class) {
         "day5/puzzle.txt" to 6225,
     )
 
-    override val part2TestCases = emptyMap<String, Int>()
-
+    override val part2TestCases = mapOf(
+        "day5/example.txt" to 12,
+        "day5/puzzle.txt" to 22116,
+    )
 }
