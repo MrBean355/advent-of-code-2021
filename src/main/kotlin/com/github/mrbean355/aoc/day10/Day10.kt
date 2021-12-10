@@ -6,78 +6,62 @@ import java.util.Stack
 class Day10(private val input: List<String>) : Puzzle {
 
     override fun part1(): Number {
-        return input.sumOf { line ->
-            when (val ch = line.findMismatchedCharacter()) {
-                ')' -> 3
-                ']' -> 57
-                '}' -> 1197
-                '>' -> 25137
-                null -> 0.toInt()
-                else -> error("Invalid character: $ch")
-            }
-        }
+        val scores = mapOf(
+            ')' to 3,
+            ']' to 57,
+            '}' to 1197,
+            '>' to 25137
+        )
+        return input.mapNotNull { it.findMismatchedCharacter() }
+            .sumOf { scores.getValue(it) }
     }
 
     override fun part2(): Number {
-        val stack = Stack<Char>()
-        return input.filter { it.isIncomplete() }.map { line ->
+        val scores = mapOf(
+            '(' to 1,
+            '[' to 2,
+            '{' to 3,
+            '<' to 4
+        )
+        return input.filter { it.findMismatchedCharacter() == null }.map { line ->
+            val stack = Stack<Char>()
             line.forEach { ch ->
-                when (ch) {
-                    '(', '[', '{', '<' -> stack.push(ch)
-                    ')' -> stack.popExpected('(')
-                    ']' -> stack.popExpected('[')
-                    '}' -> stack.popExpected('{')
-                    '>' -> stack.popExpected('<')
-                    else -> error("Invalid character: $ch")
+                if (ch.isOpening) {
+                    stack.push(ch)
+                } else {
+                    stack.pop()
                 }
             }
-            var score = 0L
-            while (stack.isNotEmpty()) {
-                val ch = stack.pop()
-                score = score * 5 + when (ch) {
-                    '(' -> 1
-                    '[' -> 2
-                    '{' -> 3
-                    '<' -> 4
-                    else -> error("Invalid character: $ch")
-                }
+            stack.foldRight(0L) { ch, acc ->
+                acc * 5 + scores.getValue(ch)
             }
-            score
-        }.sorted().let { scores ->
-            scores[scores.size / 2]
+        }.sorted().let {
+            it[it.size / 2]
         }
     }
+
+    private val brackets = mapOf(
+        '(' to ')',
+        '[' to ']',
+        '{' to '}',
+        '<' to '>',
+    )
+
+    private val Char.isOpening: Boolean
+        get() = this in brackets
 
     private fun String.findMismatchedCharacter(): Char? {
         val stack = Stack<Char>()
+
         forEach { ch ->
-            when (ch) {
-                '(', '[', '{', '<' -> stack.push(ch)
-                ')' -> stack.pop().also {
-                    if (it != '(') return ch
-                }
-                ']' -> stack.pop().also {
-                    if (it != '[') return ch
-                }
-                '}' -> stack.pop().also {
-                    if (it != '{') return ch
-                }
-                '>' -> stack.pop().also {
-                    if (it != '<') return ch
-                }
-                else -> error("Invalid character: $ch")
+            if (ch.isOpening) {
+                stack.push(ch)
+            } else {
+                brackets[stack.pop()]
+                    .takeUnless { it == ch }
+                    ?.let { return ch }
             }
         }
         return null
-    }
-
-    private fun String.isIncomplete(): Boolean {
-        return this.findMismatchedCharacter() == null
-    }
-
-    private fun Stack<Char>.popExpected(char: Char) {
-        pop().also {
-            check(it == char) { "Expected to pop $char but got $it" }
-        }
     }
 }
