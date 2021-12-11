@@ -11,41 +11,49 @@ class Day11(input: List<String>) : Puzzle {
     }.toMutableList()
 
     override fun part1(): Number {
-        var totalFlashes = 0
-
-        repeat(100) {
-            octopi.replaceAll { it + 1 }
-
-            val flashedOctopi = mutableSetOf<Int>()
-
-            while (true) {
-                val flashingOctopi = octopi.withIndex()
-                    .filter { it.index !in flashedOctopi && it.value > 9 }
-                    .map { it.index }
-
-                if (flashingOctopi.isEmpty()) {
-                    break
-                }
-
-                flashingOctopi.forEach { index ->
-                    flashedOctopi += index
-                    getNeighbours(index).forEach {
-                        octopi[it] = octopi[it] + 1
-                    }
-                }
-                totalFlashes += flashingOctopi.size
-            }
-
-            flashedOctopi.forEach {
-                octopi[it] = 0
-            }
+        return (0 until 100).sumOf {
+            iterate().size
         }
-
-        return totalFlashes
     }
 
     override fun part2(): Number {
-        TODO("Not yet implemented")
+        var iteration = 1
+
+        while (true) {
+            if (iterate().size == octopi.size) {
+                return iteration
+            }
+            ++iteration
+        }
+    }
+
+    private fun iterate(): Set<Int> {
+        octopi.replaceAll { it + 1 }
+
+        val flashedOctopi = mutableSetOf<Int>()
+
+        while (true) {
+            val flashingOctopi = octopi.withIndex()
+                .filter { it.index !in flashedOctopi && it.value > 9 }
+                .map { it.index }
+
+            if (flashingOctopi.isEmpty()) {
+                break
+            }
+
+            flashingOctopi.forEach { index ->
+                flashedOctopi += index
+                getNeighbours(index).forEach {
+                    octopi[it] = octopi[it] + 1
+                }
+            }
+        }
+
+        flashedOctopi.forEach {
+            octopi[it] = 0
+        }
+
+        return flashedOctopi
     }
 
     private fun getNeighbours(index: Int): List<Int> {
@@ -65,12 +73,6 @@ class Day11(input: List<String>) : Puzzle {
     private fun validRowIndex(index: Int, expectedRow: Int): Int? {
         return index.takeIf {
             it >= 0 && it < octopi.size && it / WIDTH == expectedRow
-        }
-    }
-
-    private fun print() {
-        octopi.chunked(WIDTH).forEach { row ->
-            println(row.joinToString(separator = ""))
         }
     }
 }
