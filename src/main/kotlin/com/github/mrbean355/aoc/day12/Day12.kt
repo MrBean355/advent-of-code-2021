@@ -19,23 +19,27 @@ class Day12(input: List<String>) : Puzzle {
         this.caveMap = caveMap
     }
 
-    override fun part1() = countPathsToEnd(START_CAVE)
+    override fun part1() = countPathsToEnd(START_CAVE, canRevisit = false)
 
-    override fun part2(): Number {
-        TODO("Not yet implemented")
-    }
+    override fun part2() = countPathsToEnd(START_CAVE, canRevisit = true)
 
-    private fun countPathsToEnd(cave: String, visited: Set<String> = emptySet()): Int {
+    private fun countPathsToEnd(
+        cave: String,
+        canRevisit: Boolean,
+        visited: Set<String> = emptySet(),
+        hasRevisited: Boolean = false
+    ): Int {
         if (cave == END_CAVE) {
             return 1
         }
         val allowedNext = caveMap.getValue(cave).filter { next ->
-            next.isBigCave || next !in visited
+            next != START_CAVE && (next.isBigCave || next !in visited || (canRevisit && !hasRevisited))
         }
         return if (allowedNext.isNotEmpty()) {
             val nowVisited = visited + cave
             allowedNext.sumOf {
-                countPathsToEnd(it, nowVisited)
+                val nextRevisited = hasRevisited || (!it.isBigCave && it in visited)
+                countPathsToEnd(it, canRevisit, nowVisited, nextRevisited)
             }
         } else {
             0
