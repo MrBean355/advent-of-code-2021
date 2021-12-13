@@ -4,7 +4,7 @@ import com.github.mrbean355.aoc.base.Puzzle
 
 class Day3(private val input: List<String>) : Puzzle {
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         val length = input.first().length
         val mostCommon = mutableListOf<Int>()
 
@@ -23,7 +23,7 @@ class Day3(private val input: List<String>) : Puzzle {
         return gamma.toInt(2) * epsilon.toInt(2)
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         val oxygenGenerator = input.reduce(true)
         val co2Scrubber = input.reduce(false)
 

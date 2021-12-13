@@ -10,13 +10,13 @@ class Day11(input: List<String>) : Puzzle {
         line.map { it.digitToInt() }
     }.toMutableList()
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         return (0 until 100).sumOf {
             iterate().size
         }
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         var iteration = 1
 
         while (true) {

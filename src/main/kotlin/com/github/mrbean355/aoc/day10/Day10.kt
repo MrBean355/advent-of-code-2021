@@ -5,7 +5,7 @@ import java.util.Stack
 
 class Day10(private val input: List<String>) : Puzzle {
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         val scores = mapOf(
             ')' to 3,
             ']' to 57,
@@ -16,7 +16,7 @@ class Day10(private val input: List<String>) : Puzzle {
             .sumOf { scores.getValue(it) }
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         val scores = mapOf(
             '(' to 1,
             '[' to 2,

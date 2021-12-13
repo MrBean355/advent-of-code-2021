@@ -6,11 +6,11 @@ class Day6(input: List<String>) : Puzzle {
 
     private val initialFish = input.first().split(',').map(String::toInt)
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         return simulateFishLife(generations = 80)
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         return simulateFishLife(generations = 256)
     }
 

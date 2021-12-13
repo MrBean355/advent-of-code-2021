@@ -7,14 +7,14 @@ class Day9(input: List<String>) : Puzzle {
     private val width = input.first().length
     private val heights = input.joinToString("").map(Char::digitToInt)
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         return heights.withIndex().sumOf { (index, height) ->
             val minAdjacent = findAdjacentHeights(index).minOf { it }
             if (height < minAdjacent) height + 1 else 0
         }
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         val basins = findBasinIndices()
         val results = basins.associateWith { mutableSetOf<Int>() }
 

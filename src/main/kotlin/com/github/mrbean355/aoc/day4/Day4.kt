@@ -15,7 +15,7 @@ class Day4(private val input: List<String>) : Puzzle {
         boards = parse()
     }
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         moves.forEach { move ->
             boards.forEach { board ->
                 board.mark(move)
@@ -27,7 +27,7 @@ class Day4(private val input: List<String>) : Puzzle {
         error("No winner found")
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         val boards = boards.toMutableList()
 
         moves.forEach { move ->

@@ -9,12 +9,12 @@ class Day5(input: List<String>) : Puzzle {
         Line(Point(head), Point(tail))
     }
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         return lines.filter { (a, b) -> a.x == b.x || a.y == b.y }
             .countOverlappingLines()
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         return lines.countOverlappingLines()
     }
 

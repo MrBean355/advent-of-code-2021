@@ -6,11 +6,11 @@ class Day1(input: List<String>) : Puzzle {
 
     private val values = input.map(String::toInt)
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         return countIncreasingValues(values)
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         val sums = values.windowed(3).map { it.sum() }
         return countIncreasingValues(sums)
     }

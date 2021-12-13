@@ -4,7 +4,7 @@ import com.github.mrbean355.aoc.base.Puzzle
 
 class Day13(private val input: List<String>) : Puzzle {
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         val points = input.takeWhile { ',' in it }.map {
             val (x, y) = it.split(',')
             Point(x.toInt(), y.toInt())
@@ -21,7 +21,7 @@ class Day13(private val input: List<String>) : Puzzle {
         }
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         TODO("Not yet implemented")
     }
 
