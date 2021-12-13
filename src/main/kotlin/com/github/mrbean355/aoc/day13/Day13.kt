@@ -5,48 +5,82 @@ import com.github.mrbean355.aoc.base.Puzzle
 class Day13(private val input: List<String>) : Puzzle {
 
     override fun part1(): Any {
-        val points = input.takeWhile { ',' in it }.map {
-            val (x, y) = it.split(',')
-            Point(x.toInt(), y.toInt())
-        }.toSet()
-
-        val (axis, position) = input.first { it.startsWith("fold") }
-            .substringAfter("along ")
-            .split('=')
-
-        return when (axis) {
-            "x" -> points.foldX(position.toInt()).size
-            "y" -> points.foldY(position.toInt()).size
-            else -> error("Unexpected axis: $axis")
-        }
+        return loadFoldInstructions()
+            .first()
+            .foldPaper(loadPoints())
+            .size
     }
 
     override fun part2(): Any {
-        TODO("Not yet implemented")
+        return loadFoldInstructions()
+            .fold(loadPoints()) { points, instruction -> instruction.foldPaper(points) }
+            .toPrettyString()
     }
 
-    private fun Set<Point>.foldX(position: Int): Set<Point> {
+    private fun Set<Point>.toPrettyString(): String {
         val maxX = maxOf(Point::x)
-        val left = filter { it.x < position }.toSet()
-        val right = this - left
-        val mapped = right.map {
-            Point(maxX - it.x, it.y)
-        }
-        return (left + mapped).toSet()
+        val maxY = maxOf(Point::y)
+
+        return buildString {
+            for (y in 0..maxY) {
+                for (x in 0..maxX) {
+                    append(if (contains(Point(x, y))) '#' else ' ')
+                }
+                appendLine()
+            }
+        }.dropLast(1)
     }
 
-    private fun Set<Point>.foldY(position: Int): Set<Point> {
-        val maxY = maxOf(Point::y)
-        val above = filter { it.y < position }.toSet()
-        val below = this - above
-        val mapped = below.map {
-            Point(it.x, maxY - it.y)
+    private fun loadPoints(): Set<Point> {
+        return input.takeWhile { ',' in it }.map {
+            val (x, y) = it.split(',')
+            Point(x.toInt(), y.toInt())
+        }.toSet()
+    }
+
+    private fun loadFoldInstructions(): List<FoldInstruction> {
+        return input.takeLastWhile { it.startsWith("fold") }.map { line ->
+            val (axis, position) = line.substringAfter("along ").split('=')
+            FoldInstruction(axis.single().lowercaseChar(), position.toInt())
         }
-        return (above + mapped).toSet()
     }
 
     private data class Point(
         val x: Int,
         val y: Int
     )
+
+    private class FoldInstruction(
+        private val direction: Char,
+        private val position: Int,
+    ) {
+
+        fun foldPaper(points: Set<Point>): Set<Point> {
+            return when (direction) {
+                'x' -> foldVertical(points)
+                'y' -> foldHorizontal(points)
+                else -> error("Invalid fold: $direction = $position")
+            }
+        }
+
+        private fun foldHorizontal(points: Set<Point>): Set<Point> {
+            return points.map { pt ->
+                if (pt.y > position) {
+                    Point(pt.x, 2 * position - pt.y)
+                } else {
+                    pt
+                }
+            }.toSet()
+        }
+
+        private fun foldVertical(points: Set<Point>): Set<Point> {
+            return points.map { pt ->
+                if (pt.x > position) {
+                    Point(2 * position - pt.x, pt.y)
+                } else {
+                    pt
+                }
+            }.toSet()
+        }
+    }
 }
