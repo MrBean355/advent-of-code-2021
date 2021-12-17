@@ -6,11 +6,11 @@ private typealias CharPair = Pair<Char, Char>
 
 class Day14(private val input: List<String>) : Puzzle {
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         return polymerize(iterations = 10)
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         return polymerize(iterations = 40)
     }
 

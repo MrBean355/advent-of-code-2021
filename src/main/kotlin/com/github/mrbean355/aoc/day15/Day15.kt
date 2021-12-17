@@ -11,7 +11,7 @@ class Day15(input: List<String>) : Puzzle {
         line.toList().map { it.digitToInt() }
     }
 
-    override fun part1(): Number {
+    override fun part1(): Any {
         val vertices = riskLevels.indices.map { Vertex(it) }
         val source = vertices.first()
         val target = vertices.last()
@@ -45,7 +45,7 @@ class Day15(input: List<String>) : Puzzle {
         error("Couldn't find path to target")
     }
 
-    override fun part2(): Number {
+    override fun part2(): Any {
         TODO("Not yet implemented")
     }
 
