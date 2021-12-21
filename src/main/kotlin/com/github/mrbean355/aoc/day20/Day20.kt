@@ -9,7 +9,14 @@ class Day20(input: List<String>) : Puzzle {
     private val inputImage = input.drop(2).map(String::toList)
 
     override fun part1(): Any {
-        val iterations = 2
+        return enhanceImage(2)
+    }
+
+    override fun part2(): Any {
+        return enhanceImage(50)
+    }
+
+    private fun enhanceImage(iterations: Int): Int {
         var grid = Grid(
             rows = inputImage.size,
             columns = inputImage.first().size,
@@ -38,10 +45,6 @@ class Day20(input: List<String>) : Puzzle {
         }
 
         return grid.count { it == '#' }
-    }
-
-    override fun part2(): Any {
-        TODO("Not yet implemented")
     }
 
     private fun List<Char>.toDecimal(): Int {
