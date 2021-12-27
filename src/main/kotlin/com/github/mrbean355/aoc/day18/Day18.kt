@@ -11,7 +11,18 @@ class Day18(private val input: List<String>) : Puzzle {
     }
 
     override fun part2(): Any {
-        TODO("Not yet implemented")
+        var max = Int.MIN_VALUE
+
+        for (i in input.indices) {
+            for (j in input.indices) {
+                if (j != i) {
+                    val sum = parse(input[j]) + parse(input[i])
+                    max = maxOf(max, sum.magnitude)
+                }
+            }
+        }
+
+        return max
     }
 
     private fun parse(
